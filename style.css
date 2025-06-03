@@ -1,0 +1,123 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 890px;
+  margin: auto;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: left;
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  table-layout: fixed; /* 👈 IMPORTANTE para que funcionen los widths */
+}
+
+/* Control individual del ancho por columna */
+th:nth-child(1), td:nth-child(1) {
+  width: 5%; /* Ítem */
+}
+
+th:nth-child(2), td:nth-child(2) {
+  width: 85%; /* Descripción */
+}
+
+th:nth-child(3), td:nth-child(3) {
+  width: 10%; /* Costo */
+}
+
+th, td {
+  padding: 10px;
+  text-align: justify;
+  border: 1px solid #333;
+  word-wrap: break-word; /* 👈 Evita que el texto se desborde */
+}
+
+th {
+  background-color: #007BFF;
+  color: white;
+}
+
+td[colspan="2"] {
+  text-align: center;
+  font-weight: bold;
+}
+
+input.descripcion {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input.precio {
+  width: 80px;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead tr {
+    display: none;
+  }
+}
+h1 + p,
+h1 + p + p {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+h1 {
+  text-align: left;
+  color: #333;
+  margin-bottom: 0px; /* 🔽 Reduce espacio debajo del título */
+}
+
+h1 + p {
+  text-align: left;
+  margin-top: 0;       /* 🔽 Elimina espacio arriba del párrafo */
+  margin-bottom: 2px;  /* 🔽 Pequeño espacio hacia el siguiente <p> */
+}
+
+h1 + p + p {
+  text-align: left;
+  margin-top: 0;
+}
+.footer {
+  max-width: 890px;
+  margin: 30px auto 20px auto;
+  padding: 10px 20px;
+  font-size: 0.9em;
+  text-align: center;
+  color: #333;
+  border-top: 1px solid #ccc;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
