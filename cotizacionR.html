@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cotización - Herrería MACOM</title>
+  <link rel="stylesheet" href="style.css" />
+  
+  <!-- Scripts correctos para exportar a PDF con HTML -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="container" id="cotizacion">
+    <h1>MACOM HERRERIA</h1>
+    <p>Salvador Ortega 109 B, Lindavista, 38010 Celaya, Gto.</p>
+    <p id="fecha"></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Ítem</th>
+          <th>Descripción</th>
+          <th>Costo (MXN)</th>
+        </tr>
+      </thead>
+      <tbody id="detalle"></tbody>
+    </table>
+
+    <h2>Opciones de Pago</h2>
+    <ul>
+      <li id="total"></li>
+      <li id="descuento1"></li>
+      <li id="efectivo"></li>
+      <li id="financiamiento"></li>
+    </ul>
+
+    <button id="btnExportar" onclick="exportarPDF()">Exportar a PDF</button>
+		<p style="margin-top: 20px; font-style: italic; text-align: center;">
+		Esta cotización tiene una vigencia de 10 días naturales debido a posibles cambios en el costo de los materiales. <br>
+		¡Agradecemos su preferencia!
+		</p>
+		<footer class="footer">
+			<p style="font-size: 14px;"> <!-- Tamaño base del texto -->
+				<strong><span style="color: blue; font-weight: bold; font-size: 16px;">MA</span></strong><strong>ntenimiento,  </strong>
+				<strong><span style="color: blue; font-weight: bold; font-size: 16px;">CO</span></strong><strong>nstrucciones  </strong>
+				<strong><span style="color: blue; font-weight: bold; font-size: 16px;">M</span></strong><strong>etálicas y Soldadura Certificada</strong><br>
+				<a href="mailto:Jherrera.macom@gmail.com" style="font-weight: bold; font-size: 14px;">Jherrera.macom@gmail.com</a> | 
+				Tel: <a href="tel:4616261775" style="font-weight: bold; font-size: 14px;">4611858326</a>
+			</p>
+		</footer>
+
+  </div>
+
+  <script>
+    const datos = JSON.parse(localStorage.getItem('cotizacion'));
+    const tbody = document.getElementById('detalle');
+    let suma = 0;
+
+    datos.forEach((item, index) => {
+      const costo = item.precio * 0.7;
+      suma += item.precio;
+      tbody.innerHTML += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${item.desc}</td>
+          <td>$${costo.toFixed(2)}</td>
+        </tr>
+      `;
+    });
+
+    const subtotal = suma * 0.7;
+    const manoObra = suma * 1.104972 - subtotal;
+    const total = subtotal + manoObra;
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${datos.length + 1}</td>
+        <td>Mano de obra</td>
+        <td>$${manoObra.toFixed(2)}</td>
+      </tr>
+      <tr>
+        <td colspan="2"><strong>Total</strong></td>
+        <td><strong>$${total.toFixed(2)}</strong></td>
+      </tr>
+    `;
+
+    document.getElementById('total').innerText = `Pago Total (Opción 3MSI): $${total.toFixed(2)}`;
+    document.getElementById('descuento1').innerText = `Pago con descuento a 1 sola exhibición: $${(total * (1 - 0.056733)).toFixed(2)}`;
+    document.getElementById('efectivo').innerText = `Pago con descuento por pago en efectivo: $${(total * (1 - 0.095)).toFixed(2)}`;
+    document.getElementById('financiamiento').innerText = `Financiamiento a 12 meses: $${(total * (1 + 0.117367)).toFixed(2)}`;
+
+    const now = new Date();
+    document.getElementById('fecha').innerText = `Fecha: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+
+	function exportarPDF() {
+	// Ocultar el botón
+	document.getElementById('btnExportar').style.display = 'none';
+
+	const { jsPDF } = window.jspdf;
+	const doc = new jsPDF('p', 'pt', 'a4');
+	const cotizacion = document.getElementById('cotizacion');
+
+  doc.html(cotizacion, {
+    callback: function (pdf) {
+      pdf.save('cotizacion.pdf');
+		},
+			x: 20,
+			y: 20,
+			html2canvas: {
+			scale: 0.6,
+			useCORS: true
+		}
+	});
+	}
+
+  </script>
+</body>
+</html>
