@@ -1,55 +1,75 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cotizador</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Redireccionador</title>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2274A5 0%, #5CA4EA 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: stretch;
+      margin: 0 1rem;
+    }
+    h1 {
+      color: #fff;
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      letter-spacing: 1px;
+    }
+    .btn {
+      padding: 1.2rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      background: #fff;
+      color: #2274A5;
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 2px 10px 0 #0002;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+      outline: none;
+      margin-bottom: 0.5rem;
+    }
+    .btn:hover, .btn:focus {
+      background: #2274A5;
+      color: #fff;
+      transform: translateY(-2px) scale(1.03);
+    }
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.3rem;
+      }
+      .container {
+        max-width: 100%;
+        gap: 1.3rem;
+      }
+      .btn {
+        font-size: 1rem;
+        padding: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>Cotizador</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Ítem</th>
-          <th>Descripción</th>
-          <th>Precio (MXN)</th>
-        </tr>
-      </thead>
-      <tbody id="tabla-cotizador"></tbody>
-    </table>
-    <button id="btnCalcularR">Calcular Residencial</button>
-	<button id="btnCalcularE">Calcular Empresa</button>
+    <h1>Selecciona una opción</h1>
+    <button class="btn" onclick="location.href='cotizador.html'">Ir a Cotizador</button>
+    <button class="btn" onclick="location.href='baucher.html'">Ir a Baucher</button>
   </div>
-
-  <script>
-    const tabla = document.getElementById('tabla-cotizador');
-    for (let i = 1; i <= 10; i++) {
-      tabla.innerHTML += `
-        <tr>
-          <td>${i}</td>
-          <td><input type="text" class="descripcion" placeholder="Descripción ${i}"></td>
-          <td><input type="number" class="precio" placeholder="$0.00" step="0.01"></td>
-        </tr>
-      `;
-    }
-
-    document.getElementById('btnCalcularR').addEventListener('click', () => {
-      const descripciones = Array.from(document.querySelectorAll('.descripcion')).map(i => i.value);
-      const precios = Array.from(document.querySelectorAll('.precio')).map(i => parseFloat(i.value) || 0);
-      const datos = descripciones.map((desc, index) => ({ desc, precio: precios[index] }));
-      localStorage.setItem('cotizacion', JSON.stringify(datos));
-      location.href = 'cotizacionR.html';
-    });
-	document.getElementById('btnCalcularE').addEventListener('click', () => {
-      const descripciones = Array.from(document.querySelectorAll('.descripcion')).map(i => i.value);
-      const precios = Array.from(document.querySelectorAll('.precio')).map(i => parseFloat(i.value) || 0);
-      const datos = descripciones.map((desc, index) => ({ desc, precio: precios[index] }));
-      localStorage.setItem('cotizacion', JSON.stringify(datos));
-      location.href = 'cotizacionE.html';
-    });
-  </script>
 </body>
 </html>

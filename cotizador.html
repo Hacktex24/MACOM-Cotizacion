@@ -1,0 +1,55 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotizador</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Cotizador</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Ítem</th>
+          <th>Descripción</th>
+          <th>Precio (MXN)</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-cotizador"></tbody>
+    </table>
+    <button id="btnCalcularR">Calcular Residencial</button>
+	<button id="btnCalcularE">Calcular Empresa</button>
+  </div>
+
+  <script>
+    const tabla = document.getElementById('tabla-cotizador');
+    for (let i = 1; i <= 10; i++) {
+      tabla.innerHTML += `
+        <tr>
+          <td>${i}</td>
+          <td><input type="text" class="descripcion" placeholder="Descripción ${i}"></td>
+          <td><input type="number" class="precio" placeholder="$0.00" step="0.01"></td>
+        </tr>
+      `;
+    }
+
+    document.getElementById('btnCalcularR').addEventListener('click', () => {
+      const descripciones = Array.from(document.querySelectorAll('.descripcion')).map(i => i.value);
+      const precios = Array.from(document.querySelectorAll('.precio')).map(i => parseFloat(i.value) || 0);
+      const datos = descripciones.map((desc, index) => ({ desc, precio: precios[index] }));
+      localStorage.setItem('cotizacion', JSON.stringify(datos));
+      location.href = 'cotizacionR.html';
+    });
+	document.getElementById('btnCalcularE').addEventListener('click', () => {
+      const descripciones = Array.from(document.querySelectorAll('.descripcion')).map(i => i.value);
+      const precios = Array.from(document.querySelectorAll('.precio')).map(i => parseFloat(i.value) || 0);
+      const datos = descripciones.map((desc, index) => ({ desc, precio: precios[index] }));
+      localStorage.setItem('cotizacion', JSON.stringify(datos));
+      location.href = 'cotizacionE.html';
+    });
+  </script>
+</body>
+</html>
