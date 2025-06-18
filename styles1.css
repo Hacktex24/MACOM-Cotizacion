@@ -6,9 +6,9 @@ body {
 
 #logo {
   display: block;
-  width: 120px;
+  width: 108px;           /* 10% más chico que 120px */
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: 32px;    /* Más separación debajo del logo */
 }
 
 h1 {
