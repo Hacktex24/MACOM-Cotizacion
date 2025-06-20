@@ -10,7 +10,6 @@ body {
   background-attachment: scroll;        /* La imagen se mueve con el contenido */
 }
 
-
 .container {
   max-width: 890px;
   margin: auto;
@@ -28,7 +27,7 @@ h1 {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 18px;
   table-layout: fixed; /* 👈 IMPORTANTE para que funcionen los widths */
 }
 
@@ -46,7 +45,7 @@ th:nth-child(3), td:nth-child(3) {
 }
 
 th, td {
-  padding: 10px;
+  padding: 8px;
   text-align: justify;
   border: 1px solid #333;
   word-wrap: break-word; /* 👈 Evita que el texto se desborde */
@@ -127,4 +126,47 @@ h1 + p + p {
 
 .footer a:hover {
   text-decoration: underline;
+}
+
+/* --------- NUEVOS CAMPOS EXTRAS --------- */
+.extra-fields {
+  margin: 20px 0 12px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.extra-fields label {
+  display: block;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.extra-fields input[type="number"], .extra-fields input[type="file"] {
+  display: block;
+  margin-top: 3px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.anticipo-block {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  background: #f5f5f5;   /* Gris muy claro */
+  padding: 1px 2px;
+  border-radius: 1px;
+  text-align: center;
+  color: #232323;
+  font-size: 14px;
+  border: 1px solid #e0e0e0;
+}
+
+}
+
+#fotoBlock img, #previewImg {
+  border-radius: 7px;
+  box-shadow: 0 1px 6px #aaa3;
 }

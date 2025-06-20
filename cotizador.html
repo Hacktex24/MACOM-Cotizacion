@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,6 +9,13 @@
 <body>
   <div class="container">
     <h1>Cotizador</h1>
+
+    <!-- Selector de cantidad de ítems -->
+    <div style="margin-bottom:18px;">
+      <label for="cantidadItems" style="font-weight:bold;font-size:16px;">Cantidad de ítems:</label>
+      <input type="number" id="cantidadItems" min="1" max="10" value="10" style="width:60px;padding:4px 7px;margin-left:8px;">
+    </div>
+
     <table>
       <thead>
         <tr>
@@ -20,36 +26,109 @@
       </thead>
       <tbody id="tabla-cotizador"></tbody>
     </table>
-    <button id="btnCalcularR">Calcular Residencial</button>
-	<button id="btnCalcularE">Calcular Empresa</button>
-  </div>
 
+    <div class="extra-fields">
+      <label>Anticipo (MXN):
+        <input type="number" id="anticipo" placeholder="0.00" min="0" step="0.01">
+      </label>
+      <label>Días de entrega estimada:
+        <input type="number" id="diasEntrega" placeholder="Días" min="1" step="1">
+      </label>
+      <label>Foto de referencia:
+        <input type="file" id="fotoReferencia" accept="image/*">
+      </label>
+      <div id="previewContainer">
+        <img id="previewImg" src="" style="display:none;max-width:120px;max-height:120px;margin-top:8px;border-radius:7px;border:1px solid #ddd;">
+      </div>
+    </div>
+
+    <button id="btnCalcularR">Calcular Residencial</button>
+    <button id="btnCalcularE">Calcular Empresa</button>
+  </div>
   <script>
+    // Tabla dinámica según cantidad de ítems
     const tabla = document.getElementById('tabla-cotizador');
-    for (let i = 1; i <= 10; i++) {
-      tabla.innerHTML += `
-        <tr>
-          <td>${i}</td>
-          <td><input type="text" class="descripcion" placeholder="Descripción ${i}"></td>
-          <td><input type="number" class="precio" placeholder="$0.00" step="0.01"></td>
-        </tr>
-      `;
+    const cantidadInput = document.getElementById('cantidadItems');
+
+    function renderTabla(cantidad) {
+      // Guarda valores existentes
+      const descripciones = Array.from(document.querySelectorAll('.descripcion')).map(i => i.value);
+      const precios = Array.from(document.querySelectorAll('.precio')).map(i => i.value);
+
+      tabla.innerHTML = '';
+      for (let i = 1; i <= cantidad; i++) {
+        tabla.innerHTML += `
+          <tr>
+            <td>${i}</td>
+            <td><input type="text" class="descripcion" placeholder="Descripción ${i}" value="${descripciones[i-1]||''}"></td>
+            <td><input type="number" class="precio" placeholder="$0.00" step="0.01" value="${precios[i-1]||''}"></td>
+          </tr>
+        `;
+      }
     }
 
-    document.getElementById('btnCalcularR').addEventListener('click', () => {
+    // Inicializar tabla
+    renderTabla(parseInt(cantidadInput.value));
+
+    // Cambiar número de ítems
+    cantidadInput.addEventListener('change', function() {
+      let valor = parseInt(this.value);
+      if (valor < 1) valor = 1;
+      if (valor > 10) valor = 10;
+      this.value = valor;
+      renderTabla(valor);
+    });
+
+    // Previsualización de imagen
+    const fileInput = document.getElementById('fotoReferencia');
+    const previewImg = document.getElementById('previewImg');
+    fileInput.addEventListener('change', function(e){
+      const file = e.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = function(ev){
+          previewImg.src = ev.target.result;
+          previewImg.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function guardarDatosYRedirigir(destino){
       const descripciones = Array.from(document.querySelectorAll('.descripcion')).map(i => i.value);
       const precios = Array.from(document.querySelectorAll('.precio')).map(i => parseFloat(i.value) || 0);
       const datos = descripciones.map((desc, index) => ({ desc, precio: precios[index] }));
+
+      // Nuevos campos
+      const anticipo = parseFloat(document.getElementById('anticipo').value) || 0;
+      const diasEntrega = parseInt(document.getElementById('diasEntrega').value) || '';
+      // Foto
+      const fotoInput = document.getElementById('fotoReferencia');
+      let fotoBase64 = '';
+      if (fotoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(ev){
+          fotoBase64 = ev.target.result;
+          localStorage.setItem('fotoReferencia', fotoBase64);
+          // Guardar lo demás y redirigir
+          localStorage.setItem('cotizacion', JSON.stringify(datos));
+          localStorage.setItem('anticipo', anticipo);
+          localStorage.setItem('diasEntrega', diasEntrega);
+          location.href = destino;
+        };
+        reader.readAsDataURL(fotoInput.files[0]);
+        return; // Sale, el redirect va en el callback
+      }
+      // Sin foto: guardar directo
       localStorage.setItem('cotizacion', JSON.stringify(datos));
-      location.href = 'cotizacionR.html';
-    });
-	document.getElementById('btnCalcularE').addEventListener('click', () => {
-      const descripciones = Array.from(document.querySelectorAll('.descripcion')).map(i => i.value);
-      const precios = Array.from(document.querySelectorAll('.precio')).map(i => parseFloat(i.value) || 0);
-      const datos = descripciones.map((desc, index) => ({ desc, precio: precios[index] }));
-      localStorage.setItem('cotizacion', JSON.stringify(datos));
-      location.href = 'cotizacionE.html';
-    });
+      localStorage.setItem('anticipo', anticipo);
+      localStorage.setItem('diasEntrega', diasEntrega);
+      localStorage.removeItem('fotoReferencia');
+      location.href = destino;
+    }
+
+    document.getElementById('btnCalcularR').addEventListener('click', () => guardarDatosYRedirigir('cotizacionR.html'));
+    document.getElementById('btnCalcularE').addEventListener('click', () => guardarDatosYRedirigir('cotizacionE.html'));
   </script>
 </body>
 </html>
