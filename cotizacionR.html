@@ -90,10 +90,10 @@
     `;
 
     // Opciones de pago
-    document.getElementById('total').innerText = `Pago Total (Opción 3MSI): $${total.toFixed(2)}`;
+    document.getElementById('total').innerText = `Pago Total (Opción 3MSI) TDC: $${total.toFixed(2)}`;
     document.getElementById('descuento1').innerText = `Pago con descuento a 1 sola exhibición: $${(total * (1 - 0.056733)).toFixed(2)}`;
     document.getElementById('efectivo').innerText = `Pago con descuento por pago en efectivo: $${(total * (1 - 0.095)).toFixed(2)}`;
-    document.getElementById('financiamiento').innerText = `Financiamiento a 12 meses: $${(total * (1 + 0.117367)).toFixed(2)}`;
+    document.getElementById('financiamiento').innerText = `Financiamiento a 12 meses TDC: $${(total * (1 + 0.117367)).toFixed(2)}`;
 
     // Leyenda de anticipo y entrega
     const anticipo = parseFloat(localStorage.getItem('anticipo')) || 0;
